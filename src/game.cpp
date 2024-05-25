@@ -59,28 +59,29 @@ void Game::Draw(){
     }
 }
 
+//take input from user
 void Game::handleInput(){
-    int keyPressed = GetKeyPressed();
-    if(gameOver && IsKeyPressed(KEY_ENTER)){
+    int keyPressed = GetKeyPressed();   //get key press except for down key
+    if(gameOver && IsKeyPressed(KEY_ENTER)){ //if game is over and pressed ENTER key, restart game
         gameOver = false;
         reset();
     }
     switch(keyPressed){
-        case KEY_LEFT:
+        case KEY_LEFT:      //move block left
             MoveBlockLeft();
             break;
         
-        case KEY_RIGHT:
+        case KEY_RIGHT:     //move block right
             MoveBlockRight();
             break;
 
-        case KEY_UP:
+        case KEY_UP:        //rotate block
             rotateBlock();
             break;
     }
 
     if(!gameOver){
-        if(IsKeyDown(KEY_DOWN)){
+        if(IsKeyDown(KEY_DOWN)){ //if down key is held move block down
             MoveBlockDown();
             updateScore(0,1);
         }
@@ -117,6 +118,16 @@ void Game::MoveBlockDown(){
     }
 }
 
+void Game::rotateBlock(){
+    if(!gameOver){
+        currentBlock.rotate();
+        if(isBlockOutside() || blockFits() == false){
+            currentBlock.undoRotate();
+        }
+    }
+}
+
+//check if block is outside the grid
 bool Game::isBlockOutside()
 {   
     std::vector<Position> tiles = currentBlock.GetCellPosition();
@@ -127,22 +138,14 @@ bool Game::isBlockOutside()
     return false;
 }
 
-void Game::rotateBlock(){
-    if(!gameOver){
-        currentBlock.rotate();
-        if(isBlockOutside() || blockFits() == false){
-            currentBlock.undoRotate();
-        }
-    }
-}
-
+//lock block in place if detect a collision
 void Game::lockBlock(){
     std::vector<Position> tiles = currentBlock.GetCellPosition();
     for(Position item: tiles){
         grid.grid[item.row][item.col] = currentBlock.id;
     }
     currentBlock = nextBlock;
-    if(blockFits() == false){
+    if(blockFits() == false){ //if block no longer fit, game over
         gameOver = true;
         StopMusicStream(music);
         PlaySound(gameoverSound);
@@ -150,12 +153,14 @@ void Game::lockBlock(){
     nextBlock = GetRandomBlock();
 
     int rowsCleared = grid.clearFullRow();
-    if(rowsCleared > 0){
+    //detect when row is cleared and play sound, update score
+    if(rowsCleared > 0){ 
         PlaySound(clearSound);
         updateScore(rowsCleared, 0);
     }
 }
 
+//check if current block fits on current game grid
 bool Game::blockFits()
 {
     std::vector<Position> tiles = currentBlock.GetCellPosition();
@@ -167,6 +172,7 @@ bool Game::blockFits()
     return true;
 }
 
+//reset game
 void Game::reset(){
     grid.Initialize();
     blocks = GetAllBlock();
@@ -177,6 +183,7 @@ void Game::reset(){
     PlayMusicStream(music);
 }
 
+//update score for each row cleared
 void Game::updateScore(int lineCleared, int moveDownPoint){
     switch (lineCleared){
     case 1:
@@ -198,6 +205,7 @@ void Game::updateScore(int lineCleared, int moveDownPoint){
     updateLevel(score);
 }
 
+//update level every 1250 score (or any arbitrary number you want)
 void Game::updateLevel(int score){
     if(score >= 1250*level){
         PlaySound(levelupSound);

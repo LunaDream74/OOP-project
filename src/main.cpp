@@ -4,6 +4,7 @@
 #include <iostream>
 double lastUpdateTime = 0;
 
+//set time interval
 bool eventTriggered(double interval){
     double curTime = GetTime();
     if(curTime - lastUpdateTime >= interval){
@@ -21,7 +22,7 @@ int main()
     int screenWidth = 500;
     int screenHeight = 620;
 
-    InitWindow(screenWidth, screenHeight, "Raylib Tetris");
+    InitWindow(screenWidth, screenHeight, "Raylib Tetris"); //initialize the game window 
     gameMenu();
     CloseWindow();
     return 0;
@@ -34,15 +35,16 @@ void gameStart(){
 
     while (!WindowShouldClose())
     {
+        //pause mechanic
         if(IsKeyPressed(KEY_Q)){
             paused = !paused;
         }
 
-        if(paused){
+        if(paused){         //draw if paused
             DrawTextEx(font, "PAUSED", {330,435}, 50, 2, GOLD);
         }
 
-        if(!paused){
+        if(!paused){        //if game not paused run as normal
             UpdateMusicStream(game.music);
             game.handleInput();
             if(eventTriggered(1/(2.0*game.level))){
@@ -52,7 +54,7 @@ void gameStart(){
         
         BeginDrawing();
         ClearBackground(darkBlue);
-        DrawTextEx(font, "Score", {365,15}, 38, 2, WHITE);
+        DrawTextEx(font, "Score", {365,15}, 38, 2, WHITE);          //draw text
         DrawTextEx(font, "Level", {365,115}, 38, 2, WHITE);
         DrawTextEx(font, "Next", {370,220}, 38, 2, WHITE);
         
@@ -70,6 +72,7 @@ void gameStart(){
 
         DrawRectangleRounded({320, 255, 170, 130}, 0.3, 6, lightBlue);      //rectangle for next block
 
+        //texts appear if game is over
         if(game.gameOver){
             DrawTextEx(font, "GAME OVER", {320,435}, 38, 2, WHITE);
             DrawTextEx(font, "Press ENTER", {325,475}, 32, 2, WHITE);
@@ -80,6 +83,7 @@ void gameStart(){
     }
 }
 
+//initialize the menu screen
 void gameMenu(){
     SetTargetFPS(60);
     Font font = LoadFontEx("font/OpenSans-Regular.ttf",64,0,0);
