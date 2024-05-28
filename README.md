@@ -1,7 +1,7 @@
 # UNIVERSITY OF SCIENCE - VNUHCM
 # OBJECT ORIENTED PROGRAMING PROJECT - Group 1
 
-This is a small game of tetris that we made using entirely C++ programming language and raylib library. The game uses various raylib functions for graphics, input handling, and audio that can be played on Windows, macOS, and Linux computers. If you want to use this, please download the raylib library first(follows the guide on how to download raylib in the "Video Tutorial on how to download raylib" section).
+This is a small game of tetris that we made using entirely C++ programming language and raylib library. The game uses various raylib functions for graphics, input handling, and audio that can be played on Windows, macOS, and Linux computers. If you want to use this program, please download the raylib library first(follows the guide on how to download raylib in the "Video Tutorial on how to download raylib" section).
 
 <p>
     <a href="https://www.youtube.com/watch?v=wVYKG_ch4yM">Original game source</a>
